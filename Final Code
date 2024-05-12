@@ -1,0 +1,154 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Home {
+    private int square_feet;
+    private String address;
+    private String city;
+    private String state;
+    private int zip_code;
+    private String model_name;
+    private String sale_status;
+
+    // Constructor
+    public Home(int square_feet, String address, String city, String state, int zip_code, String model_name, String sale_status) {
+        this.square_feet = square_feet;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.zip_code = zip_code;
+        this.model_name = model_name;
+        this.sale_status = sale_status;
+    }
+
+    // Getter methods
+    public int getSquareFeet() {
+        return square_feet;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public int getZipCode() {
+        return zip_code;
+    }
+
+    public String getModelName() {
+        return model_name;
+    }
+
+    public String getSaleStatus() {
+        return sale_status;
+    }
+
+    // Method to list home information
+    public void listHome() {
+        System.out.println("Square Feet: " + getSquareFeet());
+        System.out.println("Address: " + getAddress());
+        System.out.println("City: " + getCity());
+        System.out.println("State: " + getState());
+        System.out.println("Zip Code: " + getZipCode());
+        System.out.println("Model Name: " + getModelName());
+        System.out.println("Sale Status: " + getSaleStatus());
+    }
+
+    // Method to update sale status
+    public void updateSaleStatus(String newStatus) {
+        this.sale_status = newStatus;
+    }
+}
+
+public class HomeInventory {
+    private static ArrayList<Home> homes = new ArrayList<>();
+
+    public static void main(String[] args) {
+        try {
+            // Create a new home and add it to the inventory
+            Home newHome = new Home(2000, "123 Main St", "Anytown", "TX", 12345, "Colonial", "available");
+            homes.add(newHome);
+            
+            // List the values of the new home
+            System.out.println("New Home Information:");
+            newHome.listHome();
+            
+            // Remove the home
+            System.out.println("Removing the home...");
+            boolean removalSuccess = removeHome(newHome);
+            System.out.println("Removal Status: " + (removalSuccess ? "Success" : "Failure"));
+            
+            // Add a new home
+            Home anotherHome = new Home(2500, "456 Elm St", "Othertown", "CA", 54321, "Ranch", "under contract");
+            homes.add(anotherHome);
+            System.out.println("New Home Added.");
+            
+            // List the values of the new home
+            System.out.println("New Home Information:");
+            anotherHome.listHome();
+            
+            // Update the sale status of the new home
+            System.out.println("Updating sale status...");
+            anotherHome.updateSaleStatus("sold");
+            System.out.println("Update Status: Success");
+            
+            // List the values of the updated home
+            System.out.println("Updated Home Information:");
+            anotherHome.listHome();
+            
+            // Ask if user wants to print information to a file
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Do you want to print the information to a file? (Y/N)");
+            String response = scanner.nextLine();
+            
+            if (response.equalsIgnoreCase("Y")) {
+                printToFile();
+            } else {
+                System.out.println("File will not be printed.");
+            }
+            
+            scanner.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    // Method to remove a home from inventory
+    private static boolean removeHome(Home home) {
+        try {
+            return homes.remove(home);
+        } catch (Exception e) {
+            System.out.println("Error removing home: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Method to print home information to a file
+    private static void printToFile() {
+        try (FileWriter writer = new FileWriter("C:\\Temp\\Home.txt")) {
+            for (Home home : homes) {
+                writer.write("Home Information:\n");
+                writer.write("Square Feet: " + home.getSquareFeet() + "\n");
+                writer.write("Address: " + home.getAddress() + "\n");
+                writer.write("City: " + home.getCity() + "\n");
+                writer.write("State: " + home.getState() + "\n");
+                writer.write("Zip Code: " + home.getZipCode() + "\n");
+                writer.write("Model Name: " + home.getModelName() + "\n");
+                writer.write("Sale Status: " + home.getSaleStatus() + "\n");
+                writer.write("\n");
+            }
+            System.out.println("File printed successfully.");
+        } catch (IOException e) {
+            System.out.println("Error printing to file: " + e.getMessage());
+        }
+    }
+}
